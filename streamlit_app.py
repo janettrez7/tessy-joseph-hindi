@@ -16,6 +16,10 @@ CATEGORIES = ["Class 8 C", "Class 8 D", "Class 8 E", "Class 10 C"]
 BASE_DIR = Path("uploads")
 YOUTUBE_FILE = Path("youtube_links.json")
 
+# -----------------------
+# SETUP
+# -----------------------
+
 for cat in CATEGORIES:
     (BASE_DIR / cat).mkdir(parents=True, exist_ok=True)
 
@@ -28,52 +32,11 @@ with open(YOUTUBE_FILE, "r") as f:
 st.set_page_config(page_title="Teaching Portal", layout="centered")
 
 # -----------------------
-# LOGIN STATE
+# LOGIN
 # -----------------------
 
 if "logged_in" not in st.session_state:
     st.session_state.logged_in = False
-
-# -----------------------
-# SHOW LOGOUT BUTTON IF LOGGED IN
-# -----------------------
-
-if st.session_state.logged_in:
-    st.markdown(
-        """
-        <style>
-        .logout-button {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            color: white;
-            padding: 8px 16px;
-            font-size: 16px;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-        }
-        </style>
-        <form action="" method="post">
-            <button class="logout-button" name="logout" type="submit">🔓 Logout</button>
-        </form>
-        """,
-        unsafe_allow_html=True
-    )
-
-    # Detect logout form submission using query params workaround
-    if st.session_state.get("logout_clicked"):
-        st.session_state.logged_in = False
-        st.session_state.logout_clicked = False
-        st.rerun()
-
-    if st.query_params.get("logout") is not None:
-        st.session_state.logout_clicked = True
-        st.rerun()
-
-# -----------------------
-# LOGIN FORM
-# -----------------------
 
 if not st.session_state.logged_in:
     st.title("🔐 Welcome Tessy, please login")
@@ -83,17 +46,18 @@ if not st.session_state.logged_in:
         if username in USERS and USERS[username] == password:
             st.session_state.logged_in = True
             st.success("Login successful!")
-            st.rerun()
+            st.rerun()  # ✅ updated from experimental_rerun
         else:
             st.error("Invalid credentials. Try again.")
     st.stop()
 
 # -----------------------
-# MAIN APP (after login)
+# MAIN APP
 # -----------------------
 
 st.title("📚 Tessy Joseph HST (Hindi) Teaching Portal")
 
+# Upload Section
 st.subheader("📤 Upload Teaching Materials")
 selected_category = st.selectbox("Select Class", CATEGORIES)
 uploaded_files = st.file_uploader(
@@ -109,10 +73,7 @@ if uploaded_files:
             f.write(file.getbuffer())
         st.success(f"Uploaded to {selected_category}: {file.name}")
 
-# -----------------------
-# YOUTUBE SECTION
-# -----------------------
-
+# YouTube Upload Section
 st.subheader("🎥 Add YouTube Videos")
 if "yt_added" not in st.session_state:
     st.session_state["yt_added"] = False
@@ -133,6 +94,7 @@ if st.session_state["yt_added"]:
     st.success("YouTube video added!")
     st.session_state["yt_added"] = False
 
+# Show YouTube Videos
 if youtube_links:
     st.subheader("📺 Stored YouTube Videos")
     for idx, link in enumerate(youtube_links):
@@ -147,10 +109,7 @@ if youtube_links:
                 st.warning("Video removed")
                 st.rerun()
 
-# -----------------------
-# VIEW FILES
-# -----------------------
-
+# File Viewer
 st.subheader("📁 View Teaching Material")
 for category in CATEGORIES:
     files = os.listdir(BASE_DIR / category)
