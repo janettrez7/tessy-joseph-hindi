@@ -29,7 +29,7 @@ if not YOUTUBE_FILE.exists():
 with open(YOUTUBE_FILE, "r") as f:
     youtube_links = json.load(f)
 
-st.set_page_config(page_title="Teaching Portal", layout="wide")
+st.set_page_config(page_title="Tessy Joseph", layout="centered")
 
 # -----------------------
 # LOGIN
@@ -153,13 +153,13 @@ elif page == "All Files":
                     with col2:
                         with open(file_path, "rb") as single_file:
                             st.download_button(
-                                label="⬇️ Download",
+                                label="⬇️",
                                 data=single_file,
                                 file_name=file,
                                 mime="application/octet-stream",
                                 key=f"dl_{category}_{file}"
                             )
-                        if st.button("🗑️ Delete", key=f"del_{category}_{file}"):
+                        if st.button("🗑️ ", key=f"del_{category}_{file}"):
                             os.remove(file_path)
                             st.warning("Deleted")
                             st.rerun()
