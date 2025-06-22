@@ -55,7 +55,8 @@ if not st.session_state.logged_in:
 # MAIN APP
 # -----------------------
 
-st.title("📚 Tessy Joseph HST (Hindi) Teaching Portal")
+st.title("📚 Tessy Joseph HST (Hindi)")
+st.title("Teaching Portal")
 
 # Upload Section
 st.subheader("📤 Upload Teaching Materials")
