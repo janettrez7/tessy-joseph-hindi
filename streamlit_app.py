@@ -2,7 +2,7 @@ import streamlit as st
 import os
 from pathlib import Path
 
-CATEGORIES = ["Class 8", "Class 10"]
+CATEGORIES = ["Class 8 C","Class 8 D", "Class 8 E" "Class 10 C"]
 
 BASE_DIR = Path("uploads")
 for cat in CATEGORIES:
