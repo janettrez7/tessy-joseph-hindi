@@ -32,7 +32,7 @@ if not YOUTUBE_FILE.exists():
 with open(YOUTUBE_FILE, "r") as f:
     youtube_links = json.load(f)
 
-st.set_page_config(page_title="Teaching Portal", layout="wide")
+st.set_page_config(page_title="Tessy Joseph", layout="centered")
 
 # -----------------------
 # LOGIN
