@@ -1,7 +1,17 @@
-import streamlit as st
+ import streamlit as st
 import os
 import json
 from pathlib import Path
+
+# -----------------------
+# CONFIGURATION
+# -----------------------
+
+# Define credentials
+USERS = {
+    "teacher1": "pass123",
+    "tessy": "hindi2024"
+}
 
 CATEGORIES = ["Class 8 C", "Class 8 D", "Class 8 E", "Class 10 C"]
 BASE_DIR = Path("uploads")
@@ -16,6 +26,31 @@ with open(YOUTUBE_FILE, "r") as f:
     youtube_links = json.load(f)
 
 st.set_page_config(page_title="Teaching Portal", layout="centered")
+
+# -----------------------
+# LOGIN SECTION
+# -----------------------
+
+if "logged_in" not in st.session_state:
+    st.session_state.logged_in = False
+
+if not st.session_state.logged_in:
+    st.title("🔐 Login to Teaching Portal")
+    username = st.text_input("Username")
+    password = st.text_input("Password", type="password")
+    if st.button("Login"):
+        if username in USERS and USERS[username] == password:
+            st.session_state.logged_in = True
+            st.success("Login successful!")
+            st.experimental_rerun()
+        else:
+            st.error("Invalid credentials. Try again.")
+    st.stop()
+
+# -----------------------
+# MAIN PORTAL (after login)
+# -----------------------
+
 st.title("📚 Tessy Joseph HST (Hindi) Teaching Portal")
 
 st.subheader("📤 Upload Teaching Materials")
