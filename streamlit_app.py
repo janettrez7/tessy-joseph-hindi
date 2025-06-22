@@ -63,7 +63,7 @@ st.markdown("""
                 background-color:#263238; padding:10px 20px; border-radius:8px; color:white;">
         <div>
             <h2 style="margin:0;">📚 Tessy Joseph</h2>
-            <p style="margin:0;">HST - Hindi Teacher</p>
+            <p style="margin:0;">HST - Hindi Teacher OLCGHS Palluruthy</p>
         </div>
         <div>
             <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" width="50" style="border-radius:50%;">
