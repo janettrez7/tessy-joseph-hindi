@@ -136,10 +136,10 @@ elif page == "All Files":
 
                 for file in files:
                     file_path = BASE_DIR / category / file
-                    col1, col2 = st.columns([6, 1])
+                    col1, col2 = st.columns([6, 2])
                     with col1:
                         if file.endswith((".png", ".jpg", ".jpeg")):
-                            st.image(str(file_path), width=300)
+                            st.image(str(file_path), use_column_width=True)
                         elif file.endswith(".mp4"):
                             st.video(str(file_path))
                         elif file.endswith(".pdf"):
@@ -151,6 +151,14 @@ elif page == "All Files":
                         else:
                             st.text(file)
                     with col2:
+                        with open(file_path, "rb") as single_file:
+                            st.download_button(
+                                label="⬇️ Download",
+                                data=single_file,
+                                file_name=file,
+                                mime="application/octet-stream",
+                                key=f"dl_{category}_{file}"
+                            )
                         if st.button("🗑️ Delete", key=f"del_{category}_{file}"):
                             os.remove(file_path)
                             st.warning("Deleted")
