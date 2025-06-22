@@ -1,12 +1,19 @@
 import streamlit as st
 import os
+import json
 from pathlib import Path
 
 CATEGORIES = ["Class 8", "Class 10"]
-
 BASE_DIR = Path("uploads")
+YOUTUBE_FILE = Path("youtube_links.json")
+
 for cat in CATEGORIES:
     (BASE_DIR / cat).mkdir(parents=True, exist_ok=True)
+if not YOUTUBE_FILE.exists():
+    YOUTUBE_FILE.write_text("[]")
+
+with open(YOUTUBE_FILE, "r") as f:
+    youtube_links = json.load(f)
 
 st.title("📚 Tessy Joseph HST (Hindi) Teaching Portal")
 
@@ -25,8 +32,32 @@ if uploaded_files:
             f.write(file.getbuffer())
         st.success(f"Uploaded to {selected_category}: {file.name}")
 
-st.subheader("📁 View Teaching Material")
+st.subheader("🎥 Add YouTube Videos")
+with st.form("add_youtube_form"):
+    yt_url = st.text_input("Enter YouTube URL")
+    submit_yt = st.form_submit_button("Add Video")
+    if submit_yt and yt_url:
+        youtube_links.append(yt_url)
+        with open(YOUTUBE_FILE, "w") as f:
+            json.dump(youtube_links, f)
+        st.success("YouTube video added!")
+        st.experimental_rerun()
 
+if youtube_links:
+    st.subheader("📺 Stored YouTube Videos")
+    for idx, link in enumerate(youtube_links):
+        col1, col2 = st.columns([6, 1])
+        with col1:
+            st.video(link)
+        with col2:
+            if st.button("🗑️ Delete", key=f"yt_{idx}"):
+                youtube_links.pop(idx)
+                with open(YOUTUBE_FILE, "w") as f:
+                    json.dump(youtube_links, f)
+                st.warning("Video removed")
+                st.experimental_rerun()
+
+st.subheader("📁 View Teaching Material")
 for category in CATEGORIES:
     files = os.listdir(BASE_DIR / category)
     if files:
@@ -48,5 +79,5 @@ for category in CATEGORIES:
                 with col2:
                     if st.button("🗑️ Delete", key=f"del_{category}_{file}"):
                         os.remove(file_path)
-                        st.warning(f"Deleted")
+                        st.warning("Deleted")
                         st.experimental_rerun()
