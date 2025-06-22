@@ -29,7 +29,7 @@ if not YOUTUBE_FILE.exists():
 with open(YOUTUBE_FILE, "r") as f:
     youtube_links = json.load(f)
 
-st.set_page_config(page_title="Teaching Portal", layout="centered")
+st.set_page_config(page_title="Teaching Portal", layout="wide")
 
 # -----------------------
 # LOGIN
@@ -51,13 +51,13 @@ if not st.session_state.logged_in:
     st.stop()
 
 # -----------------------
-# SIDEBAR NAVIGATION
+# SIDEBAR NAVIGATION (Always Open)
 # -----------------------
-st.sidebar.image("https://img.icons8.com/color/96/female-teacher.png", width=80)
-st.sidebar.title("👩‍🏫 Tessy Joseph")
-st.sidebar.caption("HST - Hindi Teacher OLCGHS Palluruthy")
-
-page = st.sidebar.radio("Navigate", ["Upload Materials", "YouTube Gallery", "All Files"])
+with st.sidebar:
+    st.image("https://img.icons8.com/color/96/female-teacher.png", width=80)
+    st.title("👩‍🏫 Tessy Joseph")
+    st.caption("HST - Hindi Teacher OLCGHS Palluruthy")
+    page = st.radio("Navigate", ["Upload Materials", "YouTube Gallery", "All Files"])
 
 # -----------------------
 # PAGE 1: UPLOAD MATERIALS
@@ -120,7 +120,6 @@ elif page == "All Files":
         if files:
             with st.expander(f"📂 {category} ({len(files)} files)"):
 
-                # Add Download ZIP Button
                 zip_filename = f"{category.replace(' ', '_')}.zip"
                 zip_path = BASE_DIR / zip_filename
                 with zipfile.ZipFile(zip_path, "w") as zipf:
