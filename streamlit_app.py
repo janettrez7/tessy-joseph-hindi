@@ -84,4 +84,6 @@ for category in CATEGORIES:
                     if st.button("🗑️ Delete", key=f"del_{category}_{file}"):
                         os.remove(file_path)
                         st.warning("Deleted")
-                        st.experimental_rerun()
+                        st.session_state["refresh"] = True
+                        st.rerun()
+
