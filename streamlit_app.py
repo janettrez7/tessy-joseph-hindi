@@ -143,11 +143,14 @@ elif page == "All Files":
                         elif file.endswith(".mp4"):
                             st.video(str(file_path))
                         elif file.endswith(".pdf"):
-                            encoded_path = quote(str(file_path))
-                            st.markdown(
-                                f'<a href="{encoded_path}" target="_blank">📄 View PDF: {file}</a>',
-                                unsafe_allow_html=True
-                            )
+                            with open(file_path, "rb") as pdf_file:
+                                st.download_button(
+                                    label=f"📄 Download/View PDF: {file}",
+                                    data=pdf_file,
+                                    file_name=file,
+                                    mime="application/pdf",
+                                    key=f"pdf_{category}_{file}"
+                                )
                         else:
                             st.text(file)
                     with col2:
