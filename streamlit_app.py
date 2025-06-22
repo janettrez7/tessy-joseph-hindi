@@ -46,7 +46,6 @@ if st.session_state.logged_in:
             position: absolute;
             top: 10px;
             right: 10px;
-            background-color: #f44336;
             color: white;
             padding: 8px 16px;
             font-size: 16px;
