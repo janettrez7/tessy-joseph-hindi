@@ -16,10 +16,6 @@ CATEGORIES = ["Class 8 C", "Class 8 D", "Class 8 E", "Class 10 C"]
 BASE_DIR = Path("uploads")
 YOUTUBE_FILE = Path("youtube_links.json")
 
-# -----------------------
-# SETUP
-# -----------------------
-
 for cat in CATEGORIES:
     (BASE_DIR / cat).mkdir(parents=True, exist_ok=True)
 
@@ -32,11 +28,26 @@ with open(YOUTUBE_FILE, "r") as f:
 st.set_page_config(page_title="Teaching Portal", layout="centered")
 
 # -----------------------
-# LOGIN
+# LOGIN SYSTEM
 # -----------------------
 
 if "logged_in" not in st.session_state:
     st.session_state.logged_in = False
+
+# -----------------------
+# LOGOUT BUTTON (TOP RIGHT)
+# -----------------------
+
+if st.session_state.logged_in:
+    col1, col2 = st.columns([10, 1])
+    with col2:
+        if st.button("🔓 Logout"):
+            st.session_state.logged_in = False
+            st.rerun()
+
+# -----------------------
+# LOGIN FORM
+# -----------------------
 
 if not st.session_state.logged_in:
     st.title("🔐 Welcome Tessy, please login")
@@ -46,18 +57,17 @@ if not st.session_state.logged_in:
         if username in USERS and USERS[username] == password:
             st.session_state.logged_in = True
             st.success("Login successful!")
-            st.rerun()  # ✅ updated from experimental_rerun
+            st.rerun()
         else:
             st.error("Invalid credentials. Try again.")
     st.stop()
 
 # -----------------------
-# MAIN APP
+# MAIN APP (after login)
 # -----------------------
 
 st.title("📚 Tessy Joseph HST (Hindi) Teaching Portal")
 
-# Upload Section
 st.subheader("📤 Upload Teaching Materials")
 selected_category = st.selectbox("Select Class", CATEGORIES)
 uploaded_files = st.file_uploader(
@@ -73,7 +83,10 @@ if uploaded_files:
             f.write(file.getbuffer())
         st.success(f"Uploaded to {selected_category}: {file.name}")
 
-# YouTube Upload Section
+# -----------------------
+# YOUTUBE SECTION
+# -----------------------
+
 st.subheader("🎥 Add YouTube Videos")
 if "yt_added" not in st.session_state:
     st.session_state["yt_added"] = False
@@ -94,7 +107,6 @@ if st.session_state["yt_added"]:
     st.success("YouTube video added!")
     st.session_state["yt_added"] = False
 
-# Show YouTube Videos
 if youtube_links:
     st.subheader("📺 Stored YouTube Videos")
     for idx, link in enumerate(youtube_links):
@@ -109,7 +121,10 @@ if youtube_links:
                 st.warning("Video removed")
                 st.rerun()
 
-# File Viewer
+# -----------------------
+# VIEW FILES
+# -----------------------
+
 st.subheader("📁 View Teaching Material")
 for category in CATEGORIES:
     files = os.listdir(BASE_DIR / category)
