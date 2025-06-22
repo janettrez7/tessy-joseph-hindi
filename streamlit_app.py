@@ -139,7 +139,7 @@ elif page == "All Files":
                     col1, col2 = st.columns([6, 2])
                     with col1:
                         if file.endswith((".png", ".jpg", ".jpeg")):
-                            st.image(str(file_path), use_column_width=True)
+                            st.image(str(file_path), use_container_width=True)
                         elif file.endswith(".mp4"):
                             st.video(str(file_path))
                         elif file.endswith(".pdf"):
