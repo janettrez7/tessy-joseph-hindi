@@ -15,8 +15,7 @@ if not YOUTUBE_FILE.exists():
 with open(YOUTUBE_FILE, "r") as f:
     youtube_links = json.load(f)
 
-st.set_page_config(page_title="Teaching Portal", layout="wide")
-st.markdown("<h1 style='text-align: center; color: #4B8BBE;'>📚 Tessy Joseph HST (Hindi) Teaching Portal</h1>", unsafe_allow_html=True)
+st.title("📚 Tessy Joseph HST (Hindi) Teaching Portal")
 
 st.subheader("📤 Upload Teaching Materials")
 selected_category = st.selectbox("Select Class", CATEGORIES)
@@ -59,37 +58,26 @@ if youtube_links:
                 st.experimental_rerun()
 
 st.subheader("📁 View Teaching Material")
-
-card_style = """
-    background-color: #f8f9fa;
-    border-radius: 10px;
-    padding: 15px;
-    margin: 10px;
-    box-shadow: 2px 2px 10px rgba(0,0,0,0.05);
-    text-align: center;
-"""
-
 for category in CATEGORIES:
     files = os.listdir(BASE_DIR / category)
     if files:
-        st.markdown(f"<h4 style='margin-top:40px;'>📂 {category} ({len(files)} files)</h4>", unsafe_allow_html=True)
-        cols = st.columns(3)
-        for i, file in enumerate(files):
-            file_path = BASE_DIR / category / file
-            with cols[i % 3]:
-                st.markdown(f"<div style='{card_style}'>", unsafe_allow_html=True)
-                if file.endswith((".png", ".jpg", ".jpeg")):
-                    st.image(str(file_path), width=250)
-                elif file.endswith(".mp4"):
-                    st.video(str(file_path))
-                elif file.endswith(".pdf"):
-                    st.markdown(f"[📄 View PDF: {file}](/{file_path})", unsafe_allow_html=True)
-                else:
-                    st.text(file)
+        with st.expander(f"📂 {category} ({len(files)} files)"):
+            for file in files:
+                file_path = BASE_DIR / category / file
+                col1, col2 = st.columns([6, 1])
 
-                st.caption(file)
-                if st.button("🗑️ Delete", key=f"del_{category}_{file}"):
-                    os.remove(file_path)
-                    st.warning(f"Deleted {file}")
-                    st.experimental_rerun()
-                st.markdown("</div>", unsafe_allow_html=True)
+                with col1:
+                    if file.endswith((".png", ".jpg", ".jpeg")):
+                        st.image(str(file_path), width=300)
+                    elif file.endswith(".mp4"):
+                        st.video(str(file_path))
+                    elif file.endswith(".pdf"):
+                        st.markdown(f"[📄 View PDF: {file}](/{file_path})", unsafe_allow_html=True)
+                    else:
+                        st.text(file)
+
+                with col2:
+                    if st.button("🗑️ Delete", key=f"del_{category}_{file}"):
+                        os.remove(file_path)
+                        st.warning("Deleted")
+                        st.experimental_rerun()
