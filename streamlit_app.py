@@ -53,11 +53,11 @@ if not st.session_state.logged_in:
 # -----------------------
 # SIDEBAR NAVIGATION (Always Open)
 # -----------------------
-with st.sidebar:
-    st.image("https://img.icons8.com/color/96/female-teacher.png", width=80)
-    st.title("👩‍🏫 Tessy Joseph")
-    st.caption("HST - Hindi Teacher OLCGHS Palluruthy")
-    page = st.radio("Navigate", ["Upload Materials", "YouTube Gallery", "All Files"])
+
+st.image("https://img.icons8.com/color/96/female-teacher.png", width=80)
+st.title("👩‍🏫 Tessy Joseph")
+st.caption("HST - Hindi Teacher OLCGHS Palluruthy")
+page = st.radio("Navigate", ["Upload Materials", "YouTube Gallery", "All Files"])
 
 # -----------------------
 # PAGE 1: UPLOAD MATERIALS
