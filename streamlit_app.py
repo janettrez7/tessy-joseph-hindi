@@ -1,20 +1,17 @@
-import streamlit as st
+Update this code import streamlit as st
 import os
 from pathlib import Path
 
-# Define categories (you can customize this)
-CATEGORIES = ["General", "English", "Maths", "Science"]
+CATEGORIES = ["Class 8", "Class 10"]
 
-# Create folders for each category
 BASE_DIR = Path("uploads")
 for cat in CATEGORIES:
     (BASE_DIR / cat).mkdir(parents=True, exist_ok=True)
 
-st.title("📚 Teaching Material Portal")
+st.title("📚 Tessy Joseph HST (Hindi) Teaching Portal")
 
-# --- Upload Section ---
 st.subheader("📤 Upload Teaching Materials")
-selected_category = st.selectbox("Select Category", CATEGORIES)
+selected_category = st.selectbox("Select Class", CATEGORIES)
 uploaded_files = st.file_uploader(
     "Choose files to upload",
     accept_multiple_files=True,
@@ -28,8 +25,7 @@ if uploaded_files:
             f.write(file.getbuffer())
         st.success(f"Uploaded to {selected_category}: {file.name}")
 
-# --- Display Section ---
-st.subheader("📁 View and Manage Files")
+st.subheader("📁 View Teaching Material")
 
 for category in CATEGORIES:
     files = os.listdir(BASE_DIR / category)
@@ -52,5 +48,5 @@ for category in CATEGORIES:
                 with col2:
                     if st.button("🗑️ Delete", key=f"del_{category}_{file}"):
                         os.remove(file_path)
-                        st.warning(f"Deleted: {file}")
+                        st.warning(f"Deleted")
                         st.experimental_rerun()
