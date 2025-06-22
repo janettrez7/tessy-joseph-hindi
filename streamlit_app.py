@@ -92,7 +92,8 @@ if youtube_links:
                 with open(YOUTUBE_FILE, "w") as f:
                     json.dump(youtube_links, f)
                 st.warning("Video removed")
-                st.experimental_rerun()
+                st.session_state["refresh"] = True
+                st.rerun()
 
 st.subheader("📁 View Teaching Material")
 for category in CATEGORIES:
