@@ -15,7 +15,7 @@ if not YOUTUBE_FILE.exists():
 with open(YOUTUBE_FILE, "r") as f:
     youtube_links = json.load(f)
 
-st.set_page_config(page_title="Teaching Portal", layout="wide")
+st.set_page_config(page_title="Teaching Portal", layout="centered")
 st.title("📚 Tessy Joseph HST (Hindi) Teaching Portal")
 
 st.subheader("📤 Upload Teaching Materials")
@@ -34,6 +34,9 @@ if uploaded_files:
         st.success(f"Uploaded to {selected_category}: {file.name}")
 
 st.subheader("🎥 Add YouTube Videos")
+if "yt_added" not in st.session_state:
+    st.session_state["yt_added"] = False
+
 with st.form("add_youtube_form"):
     yt_url = st.text_input("Enter YouTube URL")
     submit_yt = st.form_submit_button("Add Video")
@@ -42,10 +45,13 @@ with st.form("add_youtube_form"):
             youtube_links.append(yt_url)
             with open(YOUTUBE_FILE, "w") as f:
                 json.dump(youtube_links, f)
-            st.success("YouTube video added!")
-            st.experimental_rerun()
+            st.session_state["yt_added"] = True
         else:
             st.error("Please enter a valid YouTube URL starting with http or https.")
+
+if st.session_state["yt_added"]:
+    st.success("YouTube video added!")
+    st.session_state["yt_added"] = False
 
 if youtube_links:
     st.subheader("📺 Stored YouTube Videos")
@@ -69,7 +75,6 @@ for category in CATEGORIES:
             for file in files:
                 file_path = BASE_DIR / category / file
                 col1, col2 = st.columns([6, 1])
-
                 with col1:
                     if file.endswith((".png", ".jpg", ".jpeg")):
                         st.image(str(file_path), width=300)
@@ -79,11 +84,8 @@ for category in CATEGORIES:
                         st.markdown(f"[📄 View PDF: {file}](/{file_path})", unsafe_allow_html=True)
                     else:
                         st.text(file)
-
                 with col2:
                     if st.button("🗑️ Delete", key=f"del_{category}_{file}"):
                         os.remove(file_path)
                         st.warning("Deleted")
-                        st.session_state["refresh"] = True
-                        st.rerun()
-
+                        st.experimental_rerun()
