@@ -28,22 +28,49 @@ with open(YOUTUBE_FILE, "r") as f:
 st.set_page_config(page_title="Teaching Portal", layout="centered")
 
 # -----------------------
-# LOGIN SYSTEM
+# LOGIN STATE
 # -----------------------
 
 if "logged_in" not in st.session_state:
     st.session_state.logged_in = False
 
 # -----------------------
-# LOGOUT BUTTON (TOP RIGHT)
+# SHOW LOGOUT BUTTON IF LOGGED IN
 # -----------------------
 
 if st.session_state.logged_in:
-    col1, col2 = st.columns([10, 1])
-    with col2:
-        if st.button("🔓 Logout"):
-            st.session_state.logged_in = False
-            st.rerun()
+    st.markdown(
+        """
+        <style>
+        .logout-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #f44336;
+            color: white;
+            padding: 8px 16px;
+            font-size: 16px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+        </style>
+        <form action="" method="post">
+            <button class="logout-button" name="logout" type="submit">🔓 Logout</button>
+        </form>
+        """,
+        unsafe_allow_html=True
+    )
+
+    # Detect logout form submission using query params workaround
+    if st.session_state.get("logout_clicked"):
+        st.session_state.logged_in = False
+        st.session_state.logout_clicked = False
+        st.rerun()
+
+    if st.query_params.get("logout") is not None:
+        st.session_state.logout_clicked = True
+        st.rerun()
 
 # -----------------------
 # LOGIN FORM
