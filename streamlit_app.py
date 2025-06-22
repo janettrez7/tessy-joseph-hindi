@@ -3,6 +3,10 @@ import os
 import json
 from pathlib import Path
 
+# -----------------------
+# USER CONFIG
+# -----------------------
+
 USERS = {
     "teacher1": "pass123",
     "tessy": "hindi2024"
@@ -12,8 +16,13 @@ CATEGORIES = ["Class 8 C", "Class 8 D", "Class 8 E", "Class 10 C"]
 BASE_DIR = Path("uploads")
 YOUTUBE_FILE = Path("youtube_links.json")
 
+# -----------------------
+# SETUP
+# -----------------------
+
 for cat in CATEGORIES:
     (BASE_DIR / cat).mkdir(parents=True, exist_ok=True)
+
 if not YOUTUBE_FILE.exists():
     YOUTUBE_FILE.write_text("[]")
 
@@ -22,6 +31,9 @@ with open(YOUTUBE_FILE, "r") as f:
 
 st.set_page_config(page_title="Teaching Portal", layout="centered")
 
+# -----------------------
+# LOGIN
+# -----------------------
 
 if "logged_in" not in st.session_state:
     st.session_state.logged_in = False
@@ -34,17 +46,18 @@ if not st.session_state.logged_in:
         if username in USERS and USERS[username] == password:
             st.session_state.logged_in = True
             st.success("Login successful!")
-            st.experimental_rerun()
+            st.rerun()  # ✅ updated from experimental_rerun
         else:
             st.error("Invalid credentials. Try again.")
     st.stop()
 
 # -----------------------
-# MAIN PORTAL (after login)
+# MAIN APP
 # -----------------------
 
 st.title("📚 Tessy Joseph HST (Hindi) Teaching Portal")
 
+# Upload Section
 st.subheader("📤 Upload Teaching Materials")
 selected_category = st.selectbox("Select Class", CATEGORIES)
 uploaded_files = st.file_uploader(
@@ -60,6 +73,7 @@ if uploaded_files:
             f.write(file.getbuffer())
         st.success(f"Uploaded to {selected_category}: {file.name}")
 
+# YouTube Upload Section
 st.subheader("🎥 Add YouTube Videos")
 if "yt_added" not in st.session_state:
     st.session_state["yt_added"] = False
@@ -80,6 +94,7 @@ if st.session_state["yt_added"]:
     st.success("YouTube video added!")
     st.session_state["yt_added"] = False
 
+# Show YouTube Videos
 if youtube_links:
     st.subheader("📺 Stored YouTube Videos")
     for idx, link in enumerate(youtube_links):
@@ -92,9 +107,9 @@ if youtube_links:
                 with open(YOUTUBE_FILE, "w") as f:
                     json.dump(youtube_links, f)
                 st.warning("Video removed")
-                st.session_state["refresh"] = True
                 st.rerun()
 
+# File Viewer
 st.subheader("📁 View Teaching Material")
 for category in CATEGORIES:
     files = os.listdir(BASE_DIR / category)
@@ -116,6 +131,4 @@ for category in CATEGORIES:
                     if st.button("🗑️ Delete", key=f"del_{category}_{file}"):
                         os.remove(file_path)
                         st.warning("Deleted")
-                        st.session_state["refresh"] = True
                         st.rerun()
-
