@@ -13,7 +13,7 @@ USERS = {
     "tessy": "hindi2024"
 }
 
-CATEGORIES = ["Class 8 C", "Class 8 D", "Class 8 E", "Class 10 C"]
+CATEGORIES = ["Class 8", "Class 10"]
 BASE_DIR = Path("uploads")
 YOUTUBE_FILE = Path("youtube_links.json")
 
