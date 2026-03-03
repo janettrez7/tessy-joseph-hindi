@@ -9,11 +9,11 @@ from urllib.parse import quote
 # USER CONFIG
 # -----------------------
 USERS = {
-    "teacher1": "pass123",
-    "tessy": "hindi2024"
+    "teacher1": "trez",
+    "tessy": "1234"
 }
 
-CATEGORIES = ["Class 8", "Class 10"]
+CATEGORIES = ["IITM", "Fergusson"]
 BASE_DIR = Path("uploads")
 YOUTUBE_FILE = Path("youtube_links.json")
 
@@ -29,7 +29,7 @@ if not YOUTUBE_FILE.exists():
 with open(YOUTUBE_FILE, "r") as f:
     youtube_links = json.load(f)
 
-st.set_page_config(page_title="Tessy Joseph", layout="centered")
+st.set_page_config(page_title="Janet", layout="centered")
 
 # -----------------------
 # LOGIN
@@ -38,7 +38,7 @@ if "logged_in" not in st.session_state:
     st.session_state.logged_in = False
 
 if not st.session_state.logged_in:
-    st.title("🔐 Welcome Tessy, please login")
+    st.title("🔐 Welcome Janet, please login")
     username = st.text_input("Username")
     password = st.text_input("Password", type="password")
     if st.button("Login"):
@@ -55,8 +55,8 @@ if not st.session_state.logged_in:
 # -----------------------
 with st.sidebar:
     st.image("https://img.icons8.com/color/96/female-teacher.png", width=80)
-    st.title("👩‍🏫 Tessy Joseph")
-    st.caption("HST - Hindi Teacher OLCGHS Palluruthy")
+    st.title("👩‍🏫 Treasa Janet")
+    st.caption("Solution Consultant")
     page = st.radio("Navigate", ["Upload Materials", "YouTube Gallery", "All Files"])
 
 # -----------------------
