@@ -9,8 +9,7 @@ from urllib.parse import quote
 # USER CONFIG
 # -----------------------
 USERS = {
-    "teacher1": "trez",
-    "tessy": "1234"
+    "trez": "1234"
 }
 
 CATEGORIES = ["IITM", "Fergusson"]
